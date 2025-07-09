@@ -1,0 +1,223 @@
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    background-color: #1a1a1a;
+    color: #e0e0e0;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start; /* Align to top for scroll */
+    min-height: 100vh;
+    padding-top: 20px; /* Add some padding at the top */
+}
+
+.container {
+    width: 90%;
+    max-width: 1000px;
+    background-color: #2c2c2c;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+.controls {
+    display: flex;
+    flex-wrap: wrap; /* Allow controls to wrap on smaller screens */
+    gap: 10px;
+    margin-bottom: 20px;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #444;
+    align-items: center;
+}
+
+.controls button,
+.controls select,
+.controls input[type="number"] {
+    padding: 10px 15px;
+    background-color: #3a3a3a;
+    color: #e0e0e0;
+    border: 1px solid #555;
+    border-radius: 4px;
+    font-size: 1em;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.controls button:hover,
+.controls select:hover,
+.controls input[type="number"]:hover {
+    background-color: #4a4a4a;
+}
+
+.controls label {
+    margin-left: 5px;
+}
+
+.controls input[type="number"] {
+    width: 70px;
+}
+
+.grid-container {
+    position: relative; /* For playhead positioning */
+    background-color: #222;
+    padding: 10px;
+    border-radius: 4px;
+    overflow-x: auto; /* Allow horizontal scroll if grid is too wide */
+}
+
+#flow-grid { /* Renamed from #midi-grid */
+    display: grid;
+    /* Instrument labels + 64 steps. Try to fit more snugly. */
+    /* Let's aim for steps around 1.5% of container width, with a minimum reasonable px value */
+    grid-template-columns: 100px repeat(64, minmax(15px, 1.2vw)); /* Adjusted label width for flow elements, vw for steps */
+    gap: 1px; /* Reduced gap */
+    /* The min-width might be removed if we want it to always fit, relying on step min size */
+    /* Or set a more aggressive min-width if vw makes them too small on narrow containers */
+    /* Let's try to make the container itself wider by default */
+    /* Ensure the grid itself can scroll if content overflows its calculated size based on vw/minmax */
+    overflow-x: auto;
+    /* Add a row for bar indicators */
+    grid-template-rows: auto repeat(auto-fit, minmax(20px, 1fr)); /* Bar row + flow element rows */
+}
+
+.bar-indicator-row {
+    display: contents; /* Makes its children part of the parent grid layout */
+}
+
+.bar-number {
+    grid-row: 1; /* Place in the first row of the main flow-grid */
+    text-align: center;
+    padding: 5px 0;
+    font-size: 0.8em;
+    color: #aaa;
+    background-color: #333; /* Slightly different background */
+    border-bottom: 1px solid #444;
+    /* Spanning is set by JS (gridColumn: span 16) */
+}
+
+.bar-header-empty { /* Empty cell above flow element labels in bar header row */
+    grid-row: 1;
+    background-color: #333;
+    border-bottom: 1px solid #444;
+}
+
+
+.container {
+    width: 95%; /* Make container wider */
+    max-width: 1200px; /* Allow more horizontal space */
+    background-color: #2c2c2c;
+    border-radius: 8px;
+    padding: 20px;
+    box-shadow: 0 0 20px rgba(0,0,0,0.5);
+}
+
+
+.instrument-label {
+    padding: 10px;
+    font-weight: bold;
+    text-align: right;
+    margin-right: 5px; /* Spacing from cells */
+    color: #ccc;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    font-size: 0.9em;
+    border-right: 1px solid #444;
+}
+
+.step {
+    background-color: #444;
+    border-radius: 3px;
+    aspect-ratio: 1 / 1; /* Make cells square */
+    cursor: pointer;
+    transition: background-color 0.1s;
+    border-right: 1px solid #383838; /* Default subtle border */
+}
+
+.bar-separator-step {
+    border-right: 2px solid #666; /* Thicker, more visible border for bar separation */
+}
+
+/* For now, let's add border to the bar-number div and rely on that primarily */
+.bar-number {
+    grid-row: 1; /* Place in the first row of the main midi-grid */
+    text-align: center;
+    padding: 5px 0;
+    font-size: 0.8em;
+    color: #aaa;
+    background-color: #333; /* Slightly different background */
+    border-bottom: 1px solid #444;
+    border-right: 1px solid #555; /* Separator between bar numbers */
+    /* Spanning is set by JS (gridColumn: span 16) */
+}
+.bar-number:last-child {
+    border-right: none;
+}
+
+
+.step.active {
+    background-color: #88ddff; /* Light blue for active steps */
+}
+
+.step.playing {
+    outline: 2px solid #ffeb3b; /* Yellow outline for steps being played by playhead */
+    outline-offset: -2px;
+}
+
+
+#playhead {
+    position: absolute;
+    top: 0; /* Playhead should span the entire grid height, including new bar indicators */
+    left: 0; /* Initial X offset is handled by translateX in JS to match instrument label width */
+    width: 2px; /* This is the width of the playhead line itself, not the step cell */
+    height: 100%; /* Span full height */
+    background-color: rgba(255, 255, 0, 0.7); /* Semi-transparent yellow */
+    pointer-events: none; /* Don't interfere with clicks */
+    z-index: 10;
+    /* transition: transform 0.05s linear; */ /* Removed to potentially fix lag */
+}
+
+/* Specific instrument row styling if needed in future */
+/* .kick-row .step {} */
+/* .snare-row .step {} */
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+    .controls {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    .controls button,
+    .controls select,
+    .controls input[type="number"] {
+        width: 100%;
+        margin-bottom: 5px;
+    }
+    .controls label {
+        margin-left: 0;
+        margin-bottom: 2px;
+    }
+    #midi-grid {
+        /* Adjust for 64 steps on smaller screens, ensuring horizontal scroll will work well */
+        grid-template-columns: 50px repeat(64, minmax(12px, 1fr)); /* Smaller labels and steps, prioritize fitting */
+        /* min-width is removed to encourage fitting, scroll will appear if needed due to content */
+        overflow-x: auto; /* Ensure scroll for grid itself if content overflows */
+    }
+    /* Playhead 'left' is handled by JS transform */
+    .instrument-label { /* Will be .flow-element-label or similar if we make it more specific */
+        font-size: 0.75em;
+        padding: 6px; /* Slightly reduce padding */
+        margin-right: 3px;
+    }
+}
+
+@media (max-width: 480px) {
+    #flow-grid { /* Renamed from #midi-grid */
+        grid-template-columns: 50px repeat(64, minmax(10px, 1fr)); /* Adjusted for flow labels */
+        overflow-x: auto;
+    }
+    /* Playhead 'left' is handled by JS transform */
+    .instrument-label { /* Will be .flow-element-label */
+        font-size: 0.7em;
+        padding: 5px;
+    }
+}
