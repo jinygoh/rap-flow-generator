@@ -361,9 +361,10 @@ function init() {
         }
     });
 
-    // Generate an initial pattern on page load
-    updateSpeedForStyle(rapStyleSelect.value); // Set initial speed based on default selected style
-    handleStyleChange(); // This will trigger generation of the initial pattern
+    // Set initial speed based on default selected style, but don't generate a pattern automatically.
+    // User will click a button to generate the first pattern.
+    updateSpeedForStyle(rapStyleSelect.value);
+    // handleStyleChange(); // REMOVED: Prevents auto-generation and premature Tone.start()
 
     // Handle window resize to keep playhead dimensions correct
     window.addEventListener('resize', () => {

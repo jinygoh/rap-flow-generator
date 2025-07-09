@@ -435,6 +435,7 @@ export function generateFlowPattern(style, fusionStyles = []) {
     }
 
 
+    /*
     FLOW_ELEMENTS.forEach(el => { // This loop seems redundant now after the specific fill logic above.
         for (let step = 0; step < STEPS_PER_BAR; step++) {
             // if (fillBarPattern[el][step] === 1) { // fillBarPattern might not be what we want here for experimental
@@ -443,6 +444,7 @@ export function generateFlowPattern(style, fusionStyles = []) {
             }
         }
     });
+    */
 
     // --- Rhyme Scheme Application (AABB, ABAB) ---
     if (style !== 'experimental-flow' && style !== 'mumble') {
