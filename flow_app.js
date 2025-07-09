@@ -18,13 +18,7 @@ const emphasisClick = new Tone.PluckSynth({ // For emphasized syllables
 }).toDestination();
 emphasisClick.volume.value = -8;
 
-const multiClick = new Tone.MembraneSynth({ // For multi-syllable bursts
-    pitchDecay: 0.01,
-    octaves: 3,
-    oscillator: { type: "triangle" },
-    envelope: { attack: 0.001, decay: 0.05, sustain: 0, release: 0.1 }
-}).toDestination();
-multiClick.volume.value = -12;
+// const multiClick = new Tone.MembraneSynth({...}); // REMOVED as MULTI_SYLLABLE is removed
 
 
 // --- DOM Element References ---
@@ -160,9 +154,7 @@ function setupPlayheadAnimation() {
                     // Trigger corresponding sound based on the flow element type
                     if (elementType === 'EMPHASIS') {
                         emphasisClick.triggerAttackRelease("C4", "32n", audioTime);
-                    } else if (elementType === 'MULTI_SYLLABLE') {
-                        multiClick.triggerAttackRelease("G3", "32n", audioTime);
-                    } else if (elementType === 'SYLLABLE' || elementType === 'RHYME_A' || elementType === 'RHYME_B') {
+                    } else if (elementType === 'SYLLABLE') { // RHYME_A, RHYME_B, MULTI_SYLLABLE removed
                         mainClick.triggerAttackRelease("C3", "32n", audioTime);
                     }
                 }
